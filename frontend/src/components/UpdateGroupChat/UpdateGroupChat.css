@@ -1,0 +1,109 @@
+.updatedGroupChatModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 999;
+}
+.updatedGroupChatModal .updateGroupChat {
+  width: 30rem;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  animation: slideUp 0.3s ease-in-out;
+}
+@media (max-width: 768px) {
+  .updatedGroupChatModal .updateGroupChat {
+    width: 90%;
+    max-width: 30rem;
+  }
+}
+.updatedGroupChatModal .updateGroupChat .updateGroupChatHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+.updatedGroupChatModal .updateGroupChat .updateGroupChatHeader h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.updatedGroupChatModal .updateGroupChat .updateGroupChatHeader .icon {
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #888;
+}
+.updatedGroupChatModal .updateGroupChat .users {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.updatedGroupChatModal .updateGroupChat .group-chatName {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+.updatedGroupChatModal .updateGroupChat .group-chatName input {
+  height: 2.5rem;
+  width: 20rem;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.3rem;
+}
+.updatedGroupChatModal .updateGroupChat .group-chatName input:focus {
+  outline: none;
+  border-color: #36d7b7;
+}
+.updatedGroupChatModal .updateGroupChat .group-chatName button {
+  padding: 0.5rem 1rem;
+  background-color: #36d7b7;
+  color: #fff;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+.updatedGroupChatModal .updateGroupChat .searchUser {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.updatedGroupChatModal .updateGroupChat .searchUser input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+}
+.updatedGroupChatModal .updateGroupChat .searchUser input:focus {
+  outline: none;
+  border-color: #36d7b7;
+}
+.updatedGroupChatModal .updateGroupChat .searchUser .searchResults {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.updatedGroupChatModal .updateGroupChat .leaveGroupButton {
+  width: 9rem;
+  padding: 0.5rem;
+  background-color: red;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+}
+@keyframes slideUp {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}/*# sourceMappingURL=UpdateGroupChat.css.map */

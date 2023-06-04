@@ -1,0 +1,29 @@
+.user-badge-item {
+  display: flex;
+  gap: 2.3rem;
+  width: 8rem;
+  justify-content: center;
+  align-items: center;
+  background: purple;
+  color: #fff;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+.user-badge-item:hover {
+  background: #8a2be2;
+}
+.user-badge-item .cross-icon {
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+}
+.user-badge-item:hover .cross-icon {
+  color: #ff0000;
+}
+@media screen and (max-width: 768px) {
+  .user-badge-item {
+    width: 100%;
+    font-size: 0.8rem;
+  }
+}/*# sourceMappingURL=UserBadgeItem.css.map */

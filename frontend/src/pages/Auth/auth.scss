@@ -1,0 +1,121 @@
+.chatauth {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+
+  .chatName {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #333;
+    padding: 1rem;
+    color: #fff;
+    text-align: center;
+    z-index: 999;
+    transition: top 0.3s ease;
+  }
+
+  .auth {
+    margin-top: 4rem;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    padding: 2rem;
+    width: 25rem; /* Equivalent to 400px */
+
+    // Media query for smaller screens
+    @media (max-width: 48rem) { /* Equivalent to 768px */
+      width: 100%;
+      max-width: 25rem;
+      margin: 2rem;
+    }
+
+    .tab-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+
+      .tab {
+        cursor: pointer;
+        padding: 0.5rem;
+        margin-right: 1rem;
+        font-weight: bold;
+        color: #666;
+        transition: color 0.3s ease, border-bottom 0.3s ease;
+
+        &.active {
+          color: #333;
+          border-bottom: 0.125rem solid #333; /* Equivalent to 2px */
+        }
+      }
+    }
+
+    .form-container {
+      .form-wrapper {
+        background-color: #fff;
+        border-radius: 4px;
+        padding: 2rem;
+
+        .form-header {
+          text-align: center;
+          margin-bottom: 1.5rem;
+
+          h2 {
+            font-size: 1.8rem; /* Equivalent to 28.8px */
+            color: #333;
+          }
+        }
+
+        .form-content {
+          .LoginForm,
+          .RegistrationForm {
+            margin-bottom: 1.5rem;
+
+            .form-inputs {
+              margin-bottom: 1rem;
+
+              .input-group {
+                display: flex;
+                flex-direction: column;
+                margin-bottom: 1rem;
+
+                label {
+                  margin-bottom: 0.5rem;
+                  font-weight: bold;
+                  color: #333;
+                }
+
+                input {
+                  padding: 0.5rem;
+                  border: 0.0625rem solid #ccc;
+                  border-radius: 0.25rem; 
+                }
+              }
+            }
+
+            .form-actions {
+              display: flex;
+              justify-content: center;
+
+              .btn {
+                padding: 0.5rem 1rem;
+                background-color: #333;
+                color: #fff;
+                border: none;
+                border-radius: 0.25rem; /* Equivalent to 4px */
+                cursor: pointer;
+                font-weight: bold;
+
+                &:hover {
+                  background-color: #222;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

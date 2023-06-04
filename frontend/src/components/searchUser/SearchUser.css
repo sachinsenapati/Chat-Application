@@ -1,0 +1,22 @@
+.single-search-user {
+  display: flex;
+  gap: 0.5rem;
+  background: #eeeeee;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 1rem;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+.single-search-user img {
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 50%;
+}
+.single-search-user p {
+  margin: 0;
+}
+.single-search-user:hover {
+  background: #36d7b7;
+  color: #ffffff;
+}/*# sourceMappingURL=SearchUser.css.map */
