@@ -3,10 +3,9 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-const user = JSON.parse(localStorage.getItem("user"));
-const token = user.token;
-
 export const MyChatAPI = createAsyncThunk("getMyChats", async () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const token = user.token;
   try {
     const response = await fetch(`${process.env.REACT_APP_API}/api/chat`, {
       headers: {
@@ -22,6 +21,8 @@ export const MyChatAPI = createAsyncThunk("getMyChats", async () => {
 });
 
 export const createChatAPI = createAsyncThunk("createChat", async (data) => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const token = user.token;
   console.log(data);
   try {
     const response = await fetch(`${process.env.REACT_APP_API}/api/chat`, {
@@ -44,6 +45,8 @@ export const createGroupChatAPI = createAsyncThunk(
   "createGroupChat",
   async (data) => {
     console.log(data);
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = user.token;
     try {
       const response = await fetch(
         `${process.env.REACT_APP_API}/api/chat/group`,

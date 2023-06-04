@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-const user = JSON.parse(localStorage.getItem("user"));
-const token = user.token;
-
 export const searchUserApi = createAsyncThunk("/api/search", async (query) => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const token = user.token;
+
   console.log(query);
   try {
     const response = await fetch(

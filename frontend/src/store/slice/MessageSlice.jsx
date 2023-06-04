@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {  useSelector } from "react-redux";
 
-const user = JSON.parse(localStorage.getItem("user"));
-const token = user.token;
+
 
 export const MessageAPI = createAsyncThunk("myMessages", async (chatId) => {
     console.log(chatId)
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = user.token;
   try {
     const response = await fetch(
       `${process.env.REACT_APP_API}/api/message/${chatId}`,
@@ -25,6 +26,8 @@ export const MessageAPI = createAsyncThunk("myMessages", async (chatId) => {
 
 export const createMessageAPI = createAsyncThunk("createMessage", async (data) => {
   console.log(data);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const token = user.token;
   try {
     const response = await fetch(`${process.env.REACT_APP_API}/api/message`, {
       method: "POST",
