@@ -1,0 +1,96 @@
+.group-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 999;
+
+  .createGroupChat {
+    width: 30rem;
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    animation: all 0.3s ease-in-out;
+
+    .createGroupChatHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+
+      h2 {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      .icon {
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #888;
+      }
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+
+      input {
+        height: 2.5rem;
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 0.3rem;
+
+        &:focus {
+          outline: none;
+          border-color: #36d7b7;
+        }
+      }
+
+      .searchUser {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      button[type="submit"] {
+        padding: 0.5rem 1rem;
+        background-color: #36d7b7;
+        color: #fff;
+        border: none;
+        border-radius: 0.3rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+
+        &:hover {
+          background-color: #2dbca5;
+        }
+      }
+    }
+  }
+
+  @keyframes slideUp {
+    0% {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+
+  @media (max-width: 768px) {
+    .createGroupChat {
+      width: 90%;
+      max-width: 30rem;
+    }
+  }
+}
