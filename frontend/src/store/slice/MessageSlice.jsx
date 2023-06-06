@@ -4,7 +4,7 @@ import {  useSelector } from "react-redux";
 
 
 export const MessageAPI = createAsyncThunk("myMessages", async (chatId) => {
-    console.log(chatId)
+    // console.log(chatId)
     const user = JSON.parse(localStorage.getItem("user"));
     const token = user.token;
   try {
@@ -17,7 +17,7 @@ export const MessageAPI = createAsyncThunk("myMessages", async (chatId) => {
       }
     );
     const result = await response.json();
-    console.log(result);
+    // console.log(result);
     return result;
   } catch (error) {
     throw error;
@@ -25,7 +25,7 @@ export const MessageAPI = createAsyncThunk("myMessages", async (chatId) => {
 });
 
 export const createMessageAPI = createAsyncThunk("createMessage", async (data) => {
-  console.log(data);
+  // console.log(data);
   const user = JSON.parse(localStorage.getItem("user"));
   const token = user.token;
   try {
@@ -38,7 +38,7 @@ export const createMessageAPI = createAsyncThunk("createMessage", async (data) =
       body: JSON.stringify(data),
     });
     const result = await response.json();
-    console.log(result);
+    // console.log(result);
     return result;
   } catch (error) {
     throw error;
@@ -46,7 +46,7 @@ export const createMessageAPI = createAsyncThunk("createMessage", async (data) =
 });
 
 const MessageSlice = createSlice({
-  name: "chat",
+  name: "messages",
   initialState: {
     loading: false,
     error: null,
@@ -71,7 +71,7 @@ const MessageSlice = createSlice({
       })
       .addCase(createMessageAPI.fulfilled, (state, action) => {
         state.loading = false;
-        console.log(action);
+        // console.log(action);
         state.messages.push(action.payload);
       })
       .addCase(createMessageAPI.rejected, (state, action) => {

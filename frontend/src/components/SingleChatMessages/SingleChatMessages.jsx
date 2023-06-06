@@ -1,3 +1,5 @@
+// Client-side code
+
 import "./SingleChatMessages.css";
 import { useChatState } from "../../store/slice/ChatSlice";
 import { AiTwotoneEye } from "react-icons/ai";
@@ -9,48 +11,113 @@ import {
   createMessageAPI,
   useMessageState,
 } from "../../store/slice/MessageSlice";
-import { BeatLoader } from "react-spinners";
+import { BeatLoader, RiseLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
 import { getSender, getSenderFull } from "../../config/chatLogic";
 import ScrollableChat from "../ScrollableChat/ScrollableChat";
 
+import io from "socket.io-client";
+const ENDPOINT = "http://localhost:5000"; // "https://talk-a-tive.herokuapp.com"; -> After deployment
+let socket;
+
 const SingleChatMessages = () => {
+  const [message, setMessage] = useState([]);
   const [openUser, setOpenUser] = useState(false);
-  const [openGroup, setGroup] = useState(false);
+  const [openGroup, setOpenGroup] = useState(false);
   const { selectedChat, user } = useChatState();
   const [newMessage, setNewMessage] = useState("");
   const currentUser = user.id;
   const dispatch = useDispatch();
-  const { loading, messages } = useMessageState();
+const [loading,setLoading]=useState(false)
+  const [socketConnected, setSocketConnected] = useState(false);
+  const [typing, setTyping] = useState(false);
+  const [istyping, setIsTyping] = useState(false);
 
-  const sendMessage = (e) => {
-    if (e.key === "Enter" && newMessage) {
-      dispatch(
-        createMessageAPI({
-          content: newMessage,
-          chatId: selectedChat._id,
-        })
-      );
-      setNewMessage("");
+  const fetchMessages = async () => {
+    if (!selectedChat) return;
+    try {
+      const data = await dispatch(MessageAPI(selectedChat._id)).unwrap();
+      console.log(data);
+      setMessage(data);
+      socket.emit("join chat", selectedChat._id);
+    } catch (error) {
+      console.log("Error in fetching the messages");
     }
   };
 
-  const typingHandler = (e) => {
-    setNewMessage(e.target.value);
+  const sendMessage = async (e) => {
+    if (e.key === "Enter" && newMessage) {
+      socket.emit("stop typing", selectedChat._id);
+      try {
+        const data = await dispatch(
+          createMessageAPI({
+            content: newMessage,
+            chatId: selectedChat._id,
+          })
+        ).unwrap();
+        console.log(data);
+        socket.emit("new message", data);
+        setMessage([...message, data]);
+        setNewMessage("");
+      } catch (error) {
+        console.log("Error in sending the message");
+      }
+    }
   };
 
   useEffect(() => {
-    if (!selectedChat) return;
-    console.log(selectedChat);
-    dispatch(MessageAPI(selectedChat._id));
-  }, [dispatch, selectedChat, newMessage]);
+    socket = io(ENDPOINT);
+    socket.emit("setup", user);
+    socket.on("connected", () => setSocketConnected(true));
+    socket.on("typing", () => setIsTyping(true));
+    socket.on("stop typing", () => setIsTyping(false));
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    fetchMessages();
+  }, [selectedChat,newMessage]);
+
+  const typingHandler = (e) => {
+    setNewMessage(e.target.value);
+    if (!socketConnected) return;
+
+    if (!typing) {
+      setTyping(true);
+      socket.emit("typing", selectedChat._id);
+    }
+    let lastTypingTime = new Date().getTime();
+    var timerLength = 3000;
+    setTimeout(() => {
+      var timeNow = new Date().getTime();
+      var timeDiff = timeNow - lastTypingTime;
+      if (timeDiff >= timerLength && typing) {
+        socket.emit("stop typing", selectedChat._id);
+        setTyping(false);
+      }
+    }, timerLength);
+  };
+
+  useEffect(() => {
+    socket.on("message received", (newMessageReceived) => {
+      if (!selectedChat || selectedChat._id !== newMessageReceived.chat._id) {
+        console.log("notification");
+        // Rest of the code...
+      } else {
+        setMessage([...message, newMessageReceived]);
+      }
+    });
+  }, [message]);
 
   return (
     <div className="single-chat-message">
       {openUser && (
         <Profile user={getSenderFull} setOpen={setOpenUser} open={openUser} />
       )}
-      {openGroup && <UpdateGroupChat setOpen={setGroup} open={openGroup} />}
+      {openGroup && <UpdateGroupChat setOpen={setOpenGroup} open={openGroup} />}
 
       {selectedChat ? (
         <div className="selectedChat">
@@ -76,7 +143,7 @@ const SingleChatMessages = () => {
                   <AiTwotoneEye
                     className="view-icon"
                     onClick={() => {
-                      setGroup(!openGroup);
+                      setOpenGroup(!openGroup);
                     }}
                   />
                 </div>
@@ -89,10 +156,18 @@ const SingleChatMessages = () => {
               <BeatLoader color="#36d7b7" />
             ) : (
               <div className="messages">
-                <ScrollableChat messages={messages} />
+                <ScrollableChat messages={message} />
               </div>
             )}
             <div className="type">
+              {istyping ? (
+                <div style={{marginLeft:"1.5rem"}}> 
+                  {" "}
+                  <RiseLoader color="#36d7b7" size={6} />
+                </div>
+              ) : (
+                ""
+              )}
               <input
                 className="message-input"
                 placeholder="Type"
