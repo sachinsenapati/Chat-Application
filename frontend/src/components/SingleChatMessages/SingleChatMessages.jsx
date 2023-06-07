@@ -1,5 +1,5 @@
 import "./SingleChatMessages.css";
-import { useChatState } from "../../store/slice/ChatSlice";
+import { setNotification, useChatState } from "../../store/slice/ChatSlice";
 import { AiTwotoneEye } from "react-icons/ai";
 import Profile from "../Profile/Profile";
 import UpdateGroupChat from "../UpdateGroupChat/UpdateGroupChat";
@@ -12,13 +12,13 @@ import ScrollableChat from "../ScrollableChat/ScrollableChat";
 
 import io from "socket.io-client";
 const ENDPOINT = "http://localhost:5000"; // "https://talk-a-tive.herokuapp.com"; -> After deployment
-let socket;
+var socket, selectedChatCompare;
 
 const SingleChatMessages = () => {
   const [message, setMessage] = useState([]);
   const [openUser, setOpenUser] = useState(false);
   const [openGroup, setOpenGroup] = useState(false);
-  const { selectedChat, user } = useChatState();
+  const { selectedChat, user, notification } = useChatState();
   const [newMessage, setNewMessage] = useState("");
   const currentUser = user.id;
   const dispatch = useDispatch();
@@ -73,6 +73,8 @@ const SingleChatMessages = () => {
 
   useEffect(() => {
     fetchMessages();
+    selectedChatCompare = selectedChat;
+    // eslint-disable-next-line
   }, [selectedChat, message]);
 
   const typingHandler = (e) => {
@@ -96,12 +98,17 @@ const SingleChatMessages = () => {
   };
 
   useEffect(() => {
-    socket.on("message received", (newMessageReceived) => {
-      if (!selectedChat || selectedChat._id !== newMessageReceived.chat._id) {
-        console.log("notification");
-        // Rest of the code...
+    socket.on("message received", (newMessageRecieved) => {
+      if (
+        !selectedChatCompare ||
+        selectedChatCompare._id !== newMessageRecieved.chat._id
+      ) {
+        if (!notification.includes(newMessageRecieved)) {
+          dispatch(setNotification([newMessageRecieved, ...notification]));
+          // setFetchAgain(!fetchAgain);
+        }
       } else {
-        setMessage([...message, newMessageReceived]);
+        setMessage([...message, newMessageRecieved]);
       }
     });
   }, [message]);
