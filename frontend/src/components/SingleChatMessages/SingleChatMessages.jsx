@@ -1,16 +1,10 @@
-// Client-side code
-
 import "./SingleChatMessages.css";
 import { useChatState } from "../../store/slice/ChatSlice";
 import { AiTwotoneEye } from "react-icons/ai";
 import Profile from "../Profile/Profile";
 import UpdateGroupChat from "../UpdateGroupChat/UpdateGroupChat";
 import React, { useEffect, useState } from "react";
-import {
-  MessageAPI,
-  createMessageAPI,
-  useMessageState,
-} from "../../store/slice/MessageSlice";
+import { MessageAPI, createMessageAPI } from "../../store/slice/MessageSlice";
 import { BeatLoader, RiseLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
 import { getSender, getSenderFull } from "../../config/chatLogic";
@@ -28,7 +22,7 @@ const SingleChatMessages = () => {
   const [newMessage, setNewMessage] = useState("");
   const currentUser = user.id;
   const dispatch = useDispatch();
-const [loading,setLoading]=useState(false)
+  const [loading, setLoading] = useState(false);
   const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
@@ -55,10 +49,10 @@ const [loading,setLoading]=useState(false)
             chatId: selectedChat._id,
           })
         ).unwrap();
+        setNewMessage("");
         console.log(data);
         socket.emit("new message", data);
         setMessage([...message, data]);
-        setNewMessage("");
       } catch (error) {
         console.log("Error in sending the message");
       }
@@ -79,7 +73,7 @@ const [loading,setLoading]=useState(false)
 
   useEffect(() => {
     fetchMessages();
-  }, [selectedChat,newMessage]);
+  }, [selectedChat, message]);
 
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
@@ -161,7 +155,7 @@ const [loading,setLoading]=useState(false)
             )}
             <div className="type">
               {istyping ? (
-                <div style={{marginLeft:"1.5rem"}}> 
+                <div style={{ marginLeft: "1.5rem" }}>
                   {" "}
                   <RiseLoader color="#36d7b7" size={6} />
                 </div>

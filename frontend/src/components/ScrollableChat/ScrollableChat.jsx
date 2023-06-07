@@ -28,6 +28,7 @@ const ScrollableChat = ({ messages }) => {
                   backgroundImage: `url(${m.sender.pic})`,
                   backgroundSize: "cover",
                   borderRadius: "50%",
+                  display: m.sender._id === user.id ? "none" : "block",
                 }}
               />
             )}
