@@ -7,7 +7,7 @@ const ChatBox = () => {
   const {selectedChat}=useChatState()
   return (
     <div className={`chatbox ${selectedChat ? "visible" : "hidden"}`}>
-      <SingleChatMessages />
+        <SingleChatMessages />
     </div>
   );
 };

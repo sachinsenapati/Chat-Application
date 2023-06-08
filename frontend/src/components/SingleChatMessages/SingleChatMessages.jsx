@@ -105,7 +105,6 @@ const SingleChatMessages = () => {
       ) {
         if (!notification.includes(newMessageRecieved)) {
           dispatch(setNotification([newMessageRecieved, ...notification]));
-          // setFetchAgain(!fetchAgain);
         }
       } else {
         setMessage([...message, newMessageRecieved]);
@@ -114,20 +113,22 @@ const SingleChatMessages = () => {
   }, [message]);
 
   return (
-    <div className="single-chat-message">
+    <div className="single-chat">
       {openUser && (
         <Profile user={getSenderFull} setOpen={setOpenUser} open={openUser} />
       )}
       {openGroup && <UpdateGroupChat setOpen={setOpenGroup} open={openGroup} />}
 
       {selectedChat ? (
-        <div className="selectedChat">
-          <div className="chat-header">
-            {!selectedChat.isGroupChat ? (
+        <>
+          <div className="text">
+            {message && !selectedChat.isGroupChat ? (
               <>
-                <h3>
-                  {getSender(currentUser, selectedChat.users).toUpperCase()}
-                </h3>
+                <div className="sender">
+                  <h3>
+                    {getSender(currentUser, selectedChat.users).toUpperCase()}
+                  </h3>
+                </div>
                 <div>
                   <AiTwotoneEye
                     className="view-icon"
@@ -139,20 +140,22 @@ const SingleChatMessages = () => {
               </>
             ) : (
               <>
-                <h3>{selectedChat.chatName.toUpperCase()}</h3>
-                <div>
-                  <AiTwotoneEye
-                    className="view-icon"
-                    onClick={() => {
-                      setOpenGroup(!openGroup);
-                    }}
-                  />
+                <div className="chat-name">
+                  <h3>{selectedChat.chatName.toUpperCase()}</h3>
+                  <div>
+                    <AiTwotoneEye
+                      className="view-icon"
+                      onClick={() => {
+                        setOpenGroup(!openGroup);
+                      }}
+                    />
+                  </div>
                 </div>
               </>
             )}
           </div>
 
-          <div className="messages-wrapper">
+          <div className="box">
             {loading ? (
               <BeatLoader color="#36d7b7" />
             ) : (
@@ -160,18 +163,15 @@ const SingleChatMessages = () => {
                 <ScrollableChat messages={message} />
               </div>
             )}
-            <div className="type">
-              {istyping ? (
+            <div className="input-container">
+              {istyping && (
                 <div style={{ marginLeft: "1.5rem" }}>
-                  {" "}
                   <RiseLoader color="#36d7b7" size={6} />
                 </div>
-              ) : (
-                ""
               )}
               <input
-                className="message-input"
-                placeholder="Type"
+                className="input"
+                placeholder="Enter a message..."
                 type="text"
                 value={newMessage}
                 onKeyDown={sendMessage}
@@ -180,10 +180,12 @@ const SingleChatMessages = () => {
               />
             </div>
           </div>
-        </div>
+        </>
       ) : (
-        <div className="notChatSelected">
-          <h1>Click on a user to start chatting</h1>
+        <div className="empty-chat">
+          <span className="empty-chat-text">
+            Click on a user to start chatting
+          </span>
         </div>
       )}
     </div>

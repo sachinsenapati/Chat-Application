@@ -4,23 +4,17 @@
   flex-direction: column;
   padding: 3px;
   background-color: white;
-  width: 70rem;
-  height: 43rem;
-  border-radius: 8px;
+  width: 100%;
+  min-width: 70%;
+  border-radius: lg;
   border-width: 1px;
 
   @media (max-width: 768px) {
     &.visible {
       display: flex;
     }
-
     &.hidden {
       display: none;
     }
-    width: 95%;
-    height: 97%;
-    padding: 10px;
-    border-radius: 0;
-    border-width: 0;
   }
 }

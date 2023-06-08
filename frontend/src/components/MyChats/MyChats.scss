@@ -1,73 +1,43 @@
-.chatList {
-  width: 23rem;
-  height: 43rem;
-  padding: 1rem;
-  background: #fff;
-  border-radius: 0.5rem;
-  // transition: all 0.3s ease-in-out;
+.myChats {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3px;
+  background-color: white;
+  width: 100%;
+  border-radius: lg;
+  border-width: 1px;
 
-  .chatListHeader {
+  .header {
+    padding-bottom: 3px;
+    padding-left: 3px;
+    font-size: 28px;
+    font-family: "Work sans";
     display: flex;
+    width: 100%;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 1rem;
-    // transition-delay: 0.1s;
 
-    h2 {
-      font-size: 1.5rem;
-      font-weight: bold;
-      margin: 0;
-      // transition-delay: 0.1s;
-    }
-
-    .groupChat {
+    button {
       display: flex;
-      align-items: center;
-      background: #eeeeee;
-      border-radius: 0.2rem;
-      padding: 0.7rem;
-      cursor: pointer;
-      transition: all 0.4s;
-      &:hover {
-        background: black;
-        color: white;
-      }
-
-      .icon {
-        margin-left: 0.5rem;
-      }
+      font-size: 17px;
+      font-size: 10px;
+      font-size: 17px;
     }
   }
-
   .chatsList {
-    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    padding: 3px;
+    background-color: #f8f8f8;
+    width: 100%;
+    height: 100%;
+    border-radius: lg;
+    overflow-y: hidden;
   }
   @media screen and (max-width: 768px) {
-    width: 95%;
-    height: auto;
-    padding: 0.5rem;
     &.hidden {
       display: none;
-    }
-
-    .chatListHeader {
-      flex-direction: column;
-      align-items: flex-start;
-
-      h2 {
-        font-size: 1.2rem;
-        margin-bottom: 0.5rem;
-        // transition-delay: 0.1s;
-      }
-
-      .groupChat {
-        margin-top: 0.5rem;
-        // transition-delay: 0.2s;
-      }
-    }
-
-    .chatsList {
-      margin-top: 0.5rem;
     }
   }
 }

@@ -24,14 +24,13 @@ const MyChats = () => {
   }, [dispatch,chats]);
 
   return (
-    <div className={`chatList ${selectedChat?"hidden":""}`}>
+    <div className={`myChats  ${selectedChat ? "hidden" : ""}`}>
       {open && <GroupChat setOpen={setOpen} open={open} />}
-
-      <div className="chatListHeader">
+      <div className="header">
         <h2>My Chats</h2>
-        <div className="groupChat" onClick={() => setOpen(true)}>
+        <button className="groupChat" onClick={() => setOpen(true)}>
           New Group Chat <AiOutlinePlus className="icon" />
-        </div>
+        </button>
       </div>
 
       <div className="chatsList">

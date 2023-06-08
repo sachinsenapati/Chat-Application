@@ -7,7 +7,7 @@ import HomePage from "./pages/Home/HomePage";
 
 function App() {
   return (
-    <div>
+    <>
       <Provider store={store}>
         <Router>
           <Routes>
@@ -16,7 +16,7 @@ function App() {
           </Routes>
         </Router>
       </Provider>
-    </div>
+    </>
   );
 }
 

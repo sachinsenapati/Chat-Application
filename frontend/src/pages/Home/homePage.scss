@@ -1,7 +1,10 @@
-.chatPage {
-  height: 80vh;
-  width: 98vw;
-  display: flex;
-  gap: 1rem;
-  margin: 0.8rem;
+.chatpage-container {
+  width: 100%;
+  .chatbox-container {
+    display: flex;
+    gap:0.5rem;
+    justify-content: space-between;
+    height: 89.5vh;
+    padding: 10px;
+  }
 }

@@ -7,22 +7,17 @@ import NotificationBadge from "react-notification-badge";
 import { Effect } from "react-notification-badge";
 
 import "./Header.css";
-import {
-  setNotification,
-  setSelectedChat,
-  useChatState,
-} from "../../store/slice/ChatSlice";
-import { getSender } from "../../config/chatLogic";
 import { useDispatch } from "react-redux";
+import { setNotification, setSelectedChat, useChatState } from "../../store/slice/ChatSlice";
+import { getSender } from "../../config/chatLogic";
 
 const Header = () => {
   const { user, notification } = useChatState();
   const [isOpenProfile, setOpenProfile] = useState(false);
   const [isOpenSideDrawer, setOpenSideDrawer] = useState(false);
   const [isOpenNotification, setOpenNotification] = useState(false);
-  const [notificationCount, setNotificationCount] = useState(3);
-
   const dispatch = useDispatch();
+
   const toggleProfile = () => {
     setOpenProfile(!isOpenProfile);
   };
@@ -33,6 +28,12 @@ const Header = () => {
 
   const toggleNotification = () => {
     setOpenNotification(!isOpenNotification);
+  };
+
+  const handleNotificationClick = (notifi) => {
+    toggleNotification();
+    dispatch(setSelectedChat(notifi.chat));
+    dispatch(setNotification(notification.filter((n) => n !== notifi)));
   };
 
   return (
@@ -64,15 +65,7 @@ const Header = () => {
                 notification.map((notifi) => (
                   <div
                     key={notifi._id}
-                    onClick={() => {
-                      toggleNotification(); // Call the toggleNotification function
-                      dispatch(setSelectedChat(notifi.chat));
-                      dispatch(
-                        setNotificationCount(
-                          notification.filter((n) => n !== notifi)
-                        )
-                      );
-                    }}
+                    onClick={() => handleNotificationClick(notifi)}
                     style={{ cursor: "pointer" }}
                   >
                     {notifi.chat.isGroupchat
