@@ -1,16 +1,20 @@
 import "./SingleChatMessages.css";
-import { setNotification, useChatState } from "../../store/slice/ChatSlice";
-import { AiTwotoneEye } from "react-icons/ai";
+import {
+  setNotification,
+  setSelectedChat,
+  useChatState,
+} from "../../store/slice/ChatSlice";
+import { AiOutlineArrowLeft, AiTwotoneEye } from "react-icons/ai";
 import Profile from "../Profile/Profile";
 import UpdateGroupChat from "../UpdateGroupChat/UpdateGroupChat";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { MessageAPI, createMessageAPI } from "../../store/slice/MessageSlice";
-import { BeatLoader, RiseLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
 import { getSender, getSenderFull } from "../../config/chatLogic";
 import ScrollableChat from "../ScrollableChat/ScrollableChat";
 
 import io from "socket.io-client";
+import { RiseLoader } from "react-spinners";
 const ENDPOINT = "http://localhost:5000"; // "https://talk-a-tive.herokuapp.com"; -> After deployment
 var socket, selectedChatCompare;
 
@@ -22,22 +26,23 @@ const SingleChatMessages = () => {
   const [newMessage, setNewMessage] = useState("");
   const currentUser = user.id;
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
   const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
-  const [istyping, setIsTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
 
-  const fetchMessages = async () => {
-    if (!selectedChat) return;
-    try {
-      const data = await dispatch(MessageAPI(selectedChat._id)).unwrap();
-      console.log(data);
-      setMessage(data);
-      socket.emit("join chat", selectedChat._id);
-    } catch (error) {
-      console.log("Error in fetching the messages");
-    }
-  };
+
+const fetchMessages = useCallback(async () => {
+  if (!selectedChat) return;
+  try {
+    const data = await dispatch(MessageAPI(selectedChat._id)).unwrap();
+    console.log(data);
+    setMessage(data);
+    socket.emit("join chat", selectedChat._id);
+  } catch (error) {
+    console.log("Error in fetching the messages");
+  } finally {
+  }
+}, [dispatch, selectedChat]);
 
   const sendMessage = async (e) => {
     if (e.key === "Enter" && newMessage) {
@@ -69,13 +74,31 @@ const SingleChatMessages = () => {
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [user]);
+
+useEffect(() => {
+  const fetchAndJoinMessages = async () => {
+    await fetchMessages();
+    selectedChatCompare = selectedChat;
+  };
+
+  fetchAndJoinMessages();
+}, [selectedChat, fetchMessages, message]);
 
   useEffect(() => {
-    fetchMessages();
-    selectedChatCompare = selectedChat;
-    // eslint-disable-next-line
-  }, [selectedChat, message]);
+    socket.on("message received", (newMessageReceived) => {
+      if (
+        !selectedChatCompare ||
+        selectedChatCompare._id !== newMessageReceived.chat._id
+      ) {
+        if (!notification.includes(newMessageReceived)) {
+          dispatch(setNotification([newMessageReceived, ...notification]));
+        }
+      } else {
+        setMessage([...message, newMessageReceived]);
+      }
+    });
+  }, [message, notification, dispatch]);
 
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
@@ -97,25 +120,14 @@ const SingleChatMessages = () => {
     }, timerLength);
   };
 
-  useEffect(() => {
-    socket.on("message received", (newMessageRecieved) => {
-      if (
-        !selectedChatCompare ||
-        selectedChatCompare._id !== newMessageRecieved.chat._id
-      ) {
-        if (!notification.includes(newMessageRecieved)) {
-          dispatch(setNotification([newMessageRecieved, ...notification]));
-        }
-      } else {
-        setMessage([...message, newMessageRecieved]);
-      }
-    });
-  }, [message]);
-
   return (
     <div className="single-chat">
       {openUser && (
-        <Profile user={getSenderFull} setOpen={setOpenUser} open={openUser} />
+        <Profile
+          user={getSenderFull(currentUser, selectedChat.users)}
+          setOpen={setOpenUser}
+          open={openUser}
+        />
       )}
       {openGroup && <UpdateGroupChat setOpen={setOpenGroup} open={openGroup} />}
 
@@ -124,6 +136,12 @@ const SingleChatMessages = () => {
           <div className="text">
             {message && !selectedChat.isGroupChat ? (
               <>
+                <div
+                  className="backButton"
+                  onClick={() => dispatch(setSelectedChat(""))}
+                >
+                  <AiOutlineArrowLeft />
+                </div>
                 <div className="sender">
                   <h3>
                     {getSender(currentUser, selectedChat.users).toUpperCase()}
@@ -140,45 +158,49 @@ const SingleChatMessages = () => {
               </>
             ) : (
               <>
+                <div
+                  className="backButton"
+                  onClick={() => dispatch(setSelectedChat(""))}
+                >
+                  <AiOutlineArrowLeft />
+                </div>
                 <div className="chat-name">
                   <h3>{selectedChat.chatName.toUpperCase()}</h3>
-                  <div>
-                    <AiTwotoneEye
-                      className="view-icon"
-                      onClick={() => {
-                        setOpenGroup(!openGroup);
-                      }}
-                    />
-                  </div>
+                </div>
+                <div>
+                  <AiTwotoneEye
+                    className="view-icon"
+                    onClick={() => {
+                      setOpenGroup(!openGroup);
+                    }}
+                  />
                 </div>
               </>
             )}
           </div>
 
           <div className="box">
-            {loading ? (
-              <BeatLoader color="#36d7b7" />
-            ) : (
-              <div className="messages">
-                <ScrollableChat messages={message} />
-              </div>
-            )}
-            <div className="input-container">
-              {istyping && (
-                <div style={{ marginLeft: "1.5rem" }}>
-                  <RiseLoader color="#36d7b7" size={6} />
+              <>
+                <div className="messages">
+                  <ScrollableChat messages={message} />
                 </div>
-              )}
-              <input
-                className="input"
-                placeholder="Enter a message..."
-                type="text"
-                value={newMessage}
-                onKeyDown={sendMessage}
-                required
-                onChange={typingHandler}
-              />
-            </div>
+                <div className="input-container">
+                  {isTyping && (
+                    <div >
+                      <RiseLoader color="#36d7b7" size={6} />
+                    </div>
+                  )}
+                  <input
+                    className="input"
+                    placeholder="Enter a message..."
+                    type="text"
+                    value={newMessage}
+                    onKeyDown={sendMessage}
+                    required
+                    onChange={typingHandler}
+                  />
+                </div>
+              </>
           </div>
         </>
       ) : (

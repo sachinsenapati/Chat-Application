@@ -11,6 +11,15 @@ const SingleChat = ({ chat, activeChat, setActiveChat }) => {
     setActiveChat(chat);
   };
 
+  const senderName = !chat.isGroupChat
+    ? getSenderFull(currentUser, chat.users).name
+    : chat.chatName;
+
+  const latestMessageContent =
+    chat.latestMessage && chat.latestMessage.content.length > 50
+      ? chat.latestMessage.content.substring(0, 51) + "..."
+      : chat.latestMessage?.content;
+
   return (
     <div
       className={`chatBox ${activeChat === chat ? "active" : ""}`}
@@ -19,19 +28,19 @@ const SingleChat = ({ chat, activeChat, setActiveChat }) => {
       <div className="avatar">
         <img src={getSenderFull(currentUser, chat.users).pic} alt="Avatar" />
       </div>
-      <p>
-        {!chat.isGroupChat
-          ? getSenderFull(currentUser, chat.users).name
-          : chat.chatName}
-      </p>
-      {chat.latestMessage && (
-        <p className="latestMessage">
-          <b>{chat.latestMessage.sender.name}:</b>{" "}
-          {chat.latestMessage.content.length > 50
-            ? chat.latestMessage.content.substring(0, 51) + "..."
-            : chat.latestMessage.content}
-        </p>
-      )}
+      <div className="chatContent">
+        <div className="chatName">{senderName}</div>
+        <div className="latestMessage">
+          {chat.latestMessage && chat.chatName !== "sender" && (
+            <b>{chat.latestMessage.sender.name} : </b>
+          )}
+          {latestMessageContent}
+        </div>
+      </div>
+      {/* <div className="chatInfo">
+        <span className="lastMessageTime">11:30 AM</span>
+        <span className="unreadCount">20</span>
+      </div> */}
     </div>
   );
 };

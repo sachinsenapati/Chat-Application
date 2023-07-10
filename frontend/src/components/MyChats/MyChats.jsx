@@ -20,8 +20,11 @@ const MyChats = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(MyChatAPI());
-  }, [dispatch,chats]);
+    const fetchMyChats = async () => {
+      await dispatch(MyChatAPI());
+    };
+    fetchMyChats();
+  }, [dispatch]);
 
   return (
     <div className={`myChats  ${selectedChat ? "hidden" : ""}`}>

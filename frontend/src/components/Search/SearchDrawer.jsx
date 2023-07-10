@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import "./SearchDrawer.css";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { searchUserApi } from "../../store/slice/SearchUserSlice";
 import { BeatLoader } from "react-spinners";
 import SearchUser from "../searchUser/SearchUser";
@@ -9,18 +9,11 @@ const SearchDrawer = ({ setOpenSideDrawer }) => {
   const [search, setSearch] = useState("");
   const dispatch = useDispatch();
   const data = useSelector((state) => state.searchUser);
-  // console.log(data);
-  // useEffect(() => {
-  //   if (search) {
-  //     dispatch(searchUserApi(search));
-  //   }
-  // }, [dispatch, search]);
-
-  const handleClick = () => {
-    if (search) {
-      dispatch(searchUserApi(search));
-    }
-  };
+const handleClick = async () => {
+  if (search) {
+    await dispatch(searchUserApi(search));
+  }
+};
   // eslint-disable-next-line
   const accessChat = (user) => {
     console.log(user._id);

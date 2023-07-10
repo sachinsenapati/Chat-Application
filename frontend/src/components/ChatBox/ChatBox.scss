@@ -2,14 +2,14 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  padding: 3px;
+  padding: 0.5rem; 
   background-color: white;
   width: 100%;
-  min-width: 70%;
-  border-radius: lg;
-  border-width: 1px;
+  min-width: 74%;
+  border-radius: 0.3125rem; 
+  border-width: 0.0625rem; 
 
-  @media (max-width: 768px) {
+  @media (max-width: 48rem) {
     &.visible {
       display: flex;
     }

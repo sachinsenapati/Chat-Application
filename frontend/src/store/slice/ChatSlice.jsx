@@ -141,7 +141,6 @@ export const useChatState = () => {
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("user"));
     dispatch(setUser(userInfo));
-
     if (!userInfo) navigate("/auth");
   }, [dispatch, navigate]);
 

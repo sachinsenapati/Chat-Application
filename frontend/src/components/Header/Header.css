@@ -28,6 +28,7 @@
 .header-menu .notification {
   position: relative;
   margin-right: 1rem;
+  cursor: pointer;
 }
 .header-menu .notification .notification-icon {
   font-size: 1.8rem;
@@ -52,9 +53,33 @@
 .header-menu .notification .notification-dropdown div:hover {
   background-color: #f5f5f5;
 }
-.header-menu .profile-img {
+.header-menu .profile {
+  position: relative;
+  margin-right: 1rem;
+}
+.header-menu .profile .profile-img {
   width: 3rem;
   height: 3rem;
   border-radius: 50%;
   cursor: pointer;
+}
+.header-menu .profile .profile-dropdown {
+  position: absolute;
+  top: 3rem;
+  right: 0;
+  background-color: #fff;
+  box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  min-width: 20rem;
+  display: none;
+}
+.header-menu .profile .profile-dropdown.open {
+  display: block;
+}
+.header-menu .profile .profile-dropdown div {
+  padding: 0.5rem;
+  cursor: pointer;
+}
+.header-menu .profile .profile-dropdown div:hover {
+  background-color: #f5f5f5;
 }/*# sourceMappingURL=Header.css.map */

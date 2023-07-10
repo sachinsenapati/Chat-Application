@@ -4,22 +4,3 @@
   box-sizing: border-box;
 }
 
-html,
-body {
-  height: 100%;
-  width: 100%;
-}
-
-#root {
-  height: 100%;
-  width: 100%;
-  background: url("./assests/background.svg");
-  background-size: cover;
-  overflow: hidden;
-}
-
-@media (max-width: 768px) {
-  #root {
-    background-size: contain;
-  }
-}

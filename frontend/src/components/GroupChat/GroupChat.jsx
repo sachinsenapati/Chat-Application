@@ -14,10 +14,11 @@ const GroupChat = ({ setOpen, open }) => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.searchUser);
 
-  const handleSearch = (query) => {
+  const handleSearch = async (query) => {
     setSearch(query);
-    dispatch(searchUserApi(search));
+    await dispatch(searchUserApi(search));
   };
+
   const handleGroup = (user) => {
     if (selectedUser.includes(user)) {
       console.log("Already exist");
@@ -35,9 +36,9 @@ const GroupChat = ({ setOpen, open }) => {
     }
   }, [dispatch, search]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(
+    await dispatch(
       createGroupChatAPI({
         name: chatName,
         users: JSON.stringify(selectedUser.map((u) => u._id)),
@@ -45,6 +46,7 @@ const GroupChat = ({ setOpen, open }) => {
     );
     setOpen(false);
   };
+
 
   return (
     <div

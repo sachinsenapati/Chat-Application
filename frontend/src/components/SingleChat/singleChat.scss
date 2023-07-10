@@ -1,25 +1,19 @@
+$base-font-size: 16px;
+
 .chatBox {
   display: flex;
-  background: #eeeeee;
+  align-items: center;
+  padding: 0.625rem;
   cursor: pointer;
-  padding: 3px;
-  border-radius: lg;
+  background-color: #f7f7f7;
   transition: background-color 0.3s ease;
-  &:not(:last-child) {
-    margin-bottom: 10px;
-  }
-
-  &.active {
-    background-color: #36d7b7;
-    color: #fff;
-  }
 
   .avatar {
-    width: 4rem;
-    height: 4rem;
+    width: 2.5rem; 
+    height: 2.5rem; 
     border-radius: 50%;
     overflow: hidden;
-    margin-right: 1rem;
+    margin-right: 0.625rem; 
 
     img {
       width: 100%;
@@ -28,15 +22,55 @@
     }
   }
 
-  p {
-    font-size: xs;
+  .chatContent {
+    flex-grow: 1;
+
+    .chatName {
+      margin-bottom: 0.125rem; 
+      font-weight: bold;
+      color: #333;
+      font-size: 1.375rem; 
+    }
 
     .latestMessage {
-      font-size: xs;
+      color: #888;
+      font-size: 1rem; 
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .chatInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap: 0.25rem;
+
+    .unreadCount {
+      background-color: #f44336;
+      color: #fff;
+      font-size: 0.5625rem;
+      font-weight: bold;
+      padding: 0.25rem 0.25rem;
+      border-radius: 50%;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2); 
+      align-self: flex-end;
     }
 
-    b {
-      font-weight: bold;
+    .lastMessageTime {
+      color: #888;
+      font-size: 0.75rem;
     }
+  }
+
+  &.active {
+    background-color: #36d7b7;
+    color: #fff;
+  }
+
+  &:not(:last-child) {
+    margin-bottom: 0.625rem; 
   }
 }

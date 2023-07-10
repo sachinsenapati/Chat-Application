@@ -1,95 +1,67 @@
 import { RxCross2 } from "react-icons/rx";
 import "./UpdateGroupChat.css";
 import React, { useEffect, useState } from "react";
-import { useChatState } from "../../store/slice/ChatSlice";
+import { setSelectedChat, useChatState } from "../../store/slice/ChatSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { searchUserApi } from "../../store/slice/SearchUserSlice";
 import UserBadgeItem from "../UserBadgeItem/UserBadgeItem";
 import SearchUser from "../searchUser/SearchUser";
 
 const UpdateGroupChat = ({ setOpen, open }) => {
-  // Retrieve user and token from localStorage
   const user = JSON.parse(localStorage.getItem("user"));
+  var user2 = user;
+  user2._id = user.id;
+  console.log({ user2 });
   const token = user.token;
-
-  // Retrieve selectedChat from ChatSlice
-  const { selectedChat } = useChatState();
-
-  // State variables
   const [chatName, setChatName] = useState("");
-  const [selectedUser, setSelectedUser] = useState([]);
   const [search, setSearch] = useState("");
-
-  // Redux hooks
+  const { selectedChat } = useChatState();
   const dispatch = useDispatch();
   const data = useSelector((state) => state.searchUser);
-
-  // Function to handle chat renaming
-  const handleRename = async () => {
-    // API call to update chat name
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API}/api/chat/rename`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            chatId: selectedChat._id,
-            chatName,
-          }),
-        }
-      );
-      const result = await response.json();
-      console.log(result);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleSearch = (query) => {
+    setSearch(query);
+    if (!query) return;
+    dispatch(searchUserApi(query));
   };
 
-  // Function to handle user removal from the group
-  const handleRemove = async (user1) => {
-    // Only group admins or the user being removed can perform this action
-    if (selectedChat.groupAdmin._id !== user.id && user1._id !== user.id) {
-      console.log("Only admins can remove someone!");
-      return;
-    }
-    // API call to remove user from the group
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API}/api/chat/groupremove`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            chatId: selectedChat._id,
-            userId: user1._id,
-          }),
-        }
-      );
-      const result = await response.json();
-      console.log(result);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+ const handleRename = async () => {
+   if (!chatName) return;
+   try {
+     const response = await fetch(
+       `${process.env.REACT_APP_API}/api/chat/rename`,
+       {
+         method: "PUT",
+         headers: {
+           "Content-Type": "application/json",
+           Authorization: `Bearer ${token}`,
+         },
+         body: JSON.stringify({
+           chatId: selectedChat._id,
+           chatName,
+         }),
+       }
+     );
+     const result = await response.json();
+     dispatch(setSelectedChat(result));
+     console.log(result);
+   } catch (error) {
+     console.log(error);
+   }
+   setChatName("");
+ };
+
 
   const handleAddUser = async (user1) => {
-    if (selectedChat.groupAdmin._id !== user.id) {
-      console.log("Only admins can add someone!");
-      return;
-    }
-    // Check if the user already exists in the group
     if (selectedChat.users.find((u) => u._id === user1._id)) {
       console.log("User already exists in the group");
       return;
     }
-    // API call to add user to the group
+
+    if (selectedChat.groupAdmin._id !== user.id) {
+      console.log("Only admins can add someone!");
+      return;
+    }
+
     try {
       const response = await fetch(
         `${process.env.REACT_APP_API}/api/chat/groupadd`,
@@ -103,19 +75,51 @@ const UpdateGroupChat = ({ setOpen, open }) => {
         }
       );
       const result = await response.json();
+      dispatch(setSelectedChat(result));
       console.log(result);
     } catch (error) {
       console.log(error);
     }
+    setChatName("");
   };
 
-  // Function to handle search query for users
-  const handleSearch = (query) => {
-    setSearch(query);
-    dispatch(searchUserApi(query));
+
+ const handleRemove = async (user1) => {
+   if (selectedChat.groupAdmin._id !== user.id && user1._id !== user.id) {
+     console.log("Only admins can remove someone!");
+     return;
+   }
+   try {
+     const response = await fetch(
+       `${process.env.REACT_APP_API}/api/chat/groupremove`,
+       {
+         method: "PUT",
+         headers: {
+           "Content-Type": "application/json",
+           Authorization: `Bearer ${token}`,
+         },
+         body: JSON.stringify({
+           chatId: selectedChat._id,
+           userId: user1._id,
+         }),
+       }
+     );
+     const result = await response.json();
+     user1._id === user.id
+       ? dispatch(setSelectedChat())
+       : dispatch(setSelectedChat(result));
+     console.log(result);
+   } catch (error) {
+     console.log(error);
+   }
+   setChatName("");
+ };
+
+  const handelLeaveGroup = () => {
+    handleRemove(user2);
+    setOpen(false);
   };
 
-  // Fetch search results when search query changes
   useEffect(() => {
     if (search) {
       dispatch(searchUserApi(search));
@@ -131,11 +135,11 @@ const UpdateGroupChat = ({ setOpen, open }) => {
     >
       <div className="updateGroupChat">
         <div className="updateGroupChatHeader">
-          <h2>{selectedChat.chatName.toUpperCase()}</h2>
+          <h2>{selectedChat?.chatName?.toUpperCase()}</h2>
           <RxCross2 className="icon" onClick={() => setOpen(!open)} />
         </div>
         <div className="users">
-          {selectedChat.users.map((u) => (
+          {selectedChat?.users.map((u) => (
             <UserBadgeItem key={u._id} user={u} handleDelete={handleRemove} />
           ))}
         </div>
@@ -168,13 +172,7 @@ const UpdateGroupChat = ({ setOpen, open }) => {
           </div>
         </div>
 
-        <button
-          className={`leaveGroupButton ${
-            selectedChat.groupAdmin._id === user.id
-              ? "showLeaveGroupButton"
-              : ""
-          }`}
-        >
+        <button className="leaveGroupButton" onClick={handelLeaveGroup}>
           Leave group
         </button>
       </div>

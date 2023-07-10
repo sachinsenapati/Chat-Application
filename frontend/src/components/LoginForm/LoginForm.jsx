@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./loginForm.css";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { loginApi } from "../../store/slice/loginSlice";
 import { useNavigate } from "react-router-dom";
 
@@ -17,18 +17,11 @@ const LoginForm = () => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(loginApi(data));
+    await dispatch(loginApi(data));
+    navigate("/");
   };
-
-  const response = useSelector((state) => state.user.user);
-
-  useEffect(() => {
-    if (response.status) {
-      navigate("/");
-    }
-  }, [response, navigate]);
 
   return (
     <form className="login-form" onSubmit={handleSubmit}>
