@@ -10,7 +10,12 @@ const cors = require("cors");
 
 connectDB();
 const app = express();
-app.use(cors());
+var corsOptions = {
+  origin: process.env.ORIGIN,
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.get("/", (req, res) => {
   res.send("API is running");
