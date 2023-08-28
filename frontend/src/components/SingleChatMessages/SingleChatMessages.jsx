@@ -15,7 +15,7 @@ import ScrollableChat from "../ScrollableChat/ScrollableChat";
 
 import io from "socket.io-client";
 import { RiseLoader } from "react-spinners";
-const ENDPOINT = "http://localhost:5000"; // "https://talk-a-tive.herokuapp.com"; -> After deployment
+const ENDPOINT = process.env.REACT_APP_API;
 var socket, selectedChatCompare;
 
 const SingleChatMessages = () => {
