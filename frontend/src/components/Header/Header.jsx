@@ -3,8 +3,8 @@ import { BiSearchAlt2 } from "react-icons/bi";
 import { BsFillBellFill } from "react-icons/bs";
 import Profile from "../Profile/Profile";
 import SearchDrawer from "../Search/SearchDrawer";
-import NotificationBadge from "react-notification-badge";
-import { Effect } from "react-notification-badge";
+// import NotificationBadge from "react-notification-badge";
+// import { Effect } from "react-notification-badge";
 
 import "./Header.css";
 import { useDispatch } from "react-redux";
@@ -65,10 +65,10 @@ const Header = () => {
         <h2 className="chatApplication-name">Chat Application</h2>
         <div className="header-menu">
           <div className="notification" onClick={toggleNotification}>
-            <NotificationBadge
+            {/* <NotificationBadge
               count={notification.length}
               effect={Effect.SCALE}
-            />
+            /> */}
             <BsFillBellFill className="notification-icon" />
             <div
               className={`notification-dropdown ${
