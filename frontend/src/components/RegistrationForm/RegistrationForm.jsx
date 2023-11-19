@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import "./registrationForm.css";
 import { useDispatch } from "react-redux";
 import { registrationApi } from "../../store/slice/registrationSlice";
+import { useNavigate } from "react-router-dom";
 
 const RegistrationForm = () => {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const [data, setData] = useState({
     name: "",
     email: "",
@@ -18,7 +19,11 @@ const RegistrationForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await dispatch(registrationApi(data));
+    const data1 = await dispatch(registrationApi(data));
+    if (data1) {
+      console.log(data1);
+      navigate("/");
+    }
   };
 
   return (

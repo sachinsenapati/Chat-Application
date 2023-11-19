@@ -19,8 +19,10 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await dispatch(loginApi(data));
-    navigate("/");
+    const data1 = await dispatch(loginApi(data));
+    if (data1) {
+      navigate("/");
+    }
   };
 
   return (

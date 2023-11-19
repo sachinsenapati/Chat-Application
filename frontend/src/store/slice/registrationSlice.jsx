@@ -14,6 +14,7 @@ export const registrationApi = createAsyncThunk(
         body: JSON.stringify(data),
       });
       const result = await response.json();
+      localStorage.setItem("user", JSON.stringify(result));
       console.log(result);
       return result;
     } catch (error) {
